@@ -3,6 +3,11 @@ use reqwest::Client;
 use std::error::Error;
 
 pub fn xml_data(api_key: &str) -> String {
+    let iso = "%Y-%m-%dT%H:%M:%S%.3f%:z";
+    let now = chrono::Utc::now();
+    let hour = chrono::Duration::hours(1);
+    let since = (now - hour).format(iso);
+    let until = (now + hour).format(iso);
     format!(
         r#"
 <REQUEST>
@@ -11,7 +16,8 @@ pub fn xml_data(api_key: &str) -> String {
     <FILTER>
       <AND>
         <EQ name='LocationSignature' value='Sk' />
-        <GT name='AdvertisedTimeAtLocation' value='2025-03-27T04:00Z' />
+        <GT name='AdvertisedTimeAtLocation' value='{}' />
+        <LT name='AdvertisedTimeAtLocation' value='{}' />
       </AND>
     </FILTER>
     <INCLUDE>AdvertisedTrainIdent</INCLUDE>
@@ -20,7 +26,7 @@ pub fn xml_data(api_key: &str) -> String {
   </QUERY>
 </REQUEST>
 "#,
-        api_key
+        api_key, since, until
     )
 }
 
