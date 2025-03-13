@@ -22,6 +22,7 @@ pub fn xml_data(api_key: &str) -> String {
     </FILTER>
     <INCLUDE>AdvertisedTrainIdent</INCLUDE>
     <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+    <INCLUDE>TimeAtLocationWithSeconds</INCLUDE>
     <INCLUDE>ToLocation</INCLUDE>
   </QUERY>
 </REQUEST>

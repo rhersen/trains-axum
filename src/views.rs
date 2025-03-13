@@ -18,7 +18,8 @@ struct TrainTableTemplate {
 // View model for train announcements
 struct AnnouncementView {
     advertised_train_ident: String,
-    formatted_time: String,
+    advertised_time: String,
+    actual_time: String,
     destination: String,
 }
 
@@ -37,11 +38,14 @@ pub fn render_train_table(announcements: Vec<TrainAnnouncement>) -> Html<String>
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
         .map(|announcement| {
-            // Format the datetime nicely
-            let formatted_time = announcement
+            let advertised_time = announcement
                 .advertised_time_at_location
-                .format("%H:%M:%S")
+                .format("%H:%M")
                 .to_string();
+            let actual_time = match announcement.time_at_location_with_seconds {
+                Some(actual_time) => actual_time.format("%H:%M:%S").to_string(),
+                None => "".to_string(),
+            };
 
             // Get destination (if any)
             let destination = if !announcement.to_location.is_empty() {
@@ -56,7 +60,8 @@ pub fn render_train_table(announcements: Vec<TrainAnnouncement>) -> Html<String>
 
             AnnouncementView {
                 advertised_train_ident: announcement.advertised_train_ident,
-                formatted_time,
+                advertised_time,
+                actual_time,
                 destination,
             }
         })

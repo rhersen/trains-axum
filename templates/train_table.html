@@ -4,13 +4,15 @@ block content %}
 <table>
     <tr>
         <th>Train ID</th>
-        <th>Time</th>
+        <th>Advertised</th>
+        <th>Actual</th>
         <th>Destination</th>
     </tr>
     {% for announcement in announcements %}
     <tr>
         <td>{{ announcement.advertised_train_ident }}</td>
-        <td>{{ announcement.formatted_time }}</td>
+        <td>{{ announcement.advertised_time }}</td>
+        <td>{{ announcement.actual_time }}</td>
         <td>{{ announcement.destination }}</td>
     </tr>
     {% endfor %}
