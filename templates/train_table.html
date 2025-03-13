@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}Train Announcements{% endblock %} {%
+block content %}
+<h1>Train Announcements</h1>
+<table>
+    <tr>
+        <th>Train ID</th>
+        <th>Time</th>
+        <th>Destination</th>
+    </tr>
+    {% for announcement in announcements %}
+    <tr>
+        <td>{{ announcement.advertised_train_ident }}</td>
+        <td>{{ announcement.formatted_time }}</td>
+        <td>{{ announcement.destination }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
