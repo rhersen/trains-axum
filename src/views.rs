@@ -34,18 +34,13 @@ pub fn error_page(message: &str) -> Html<String> {
 }
 
 pub fn render_train_table(announcements: Vec<TrainAnnouncement>) -> Html<String> {
-    // Sort announcements by time
-    let mut sorted_announcements = announcements;
-    sorted_announcements.sort_by_key(|a| a.advertised_time_at_location);
-
-    // Convert to view models
-    let announcement_views: Vec<AnnouncementView> = sorted_announcements
+    let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
         .map(|announcement| {
             // Format the datetime nicely
             let formatted_time = announcement
                 .advertised_time_at_location
-                .format("%H:%M, %d %b %Y")
+                .format("%H:%M:%S")
                 .to_string();
 
             // Get destination (if any)

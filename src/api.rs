@@ -12,7 +12,7 @@ pub fn xml_data(api_key: &str) -> String {
         r#"
 <REQUEST>
   <LOGIN authenticationkey='{}' />
-  <QUERY objecttype='TrainAnnouncement' sseurl='false' schemaversion='1.6'>
+  <QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation' sseurl='false' schemaversion='1.6'>
     <FILTER>
       <AND>
         <EQ name='LocationSignature' value='Sk' />
