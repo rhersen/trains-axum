@@ -2,13 +2,6 @@ use crate::models::TrainAnnouncement;
 use askama::Template;
 use axum::response::Html;
 
-// Template structs
-#[derive(Template)]
-#[template(path = "error.html")]
-struct ErrorTemplate {
-    message: String,
-}
-
 #[derive(Template)]
 #[template(path = "train_table.html")]
 struct TrainTableTemplate {
@@ -21,17 +14,6 @@ struct AnnouncementView {
     advertised_time: String,
     actual_time: String,
     destination: String,
-}
-
-pub fn error_page(message: &str) -> Html<String> {
-    let template = ErrorTemplate {
-        message: message.to_string(),
-    };
-    Html(
-        template
-            .render()
-            .unwrap_or_else(|e| format!("Template error: {}", e)),
-    )
 }
 
 pub fn render_train_table(announcements: Vec<TrainAnnouncement>) -> Html<String> {

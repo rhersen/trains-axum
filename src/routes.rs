@@ -1,3 +1,5 @@
+use axum::response::Html;
+
 use crate::api;
 use crate::models::TrainAnnouncement;
 use crate::views;
@@ -6,7 +8,7 @@ pub async fn hello_world() -> axum::response::Html<String> {
     let api_key = match std::env::var("TRAFIKVERKET_API_KEY") {
         Ok(key) => key,
         Err(_) => {
-            return views::error_page("No API key found");
+            return Html("No API key found".to_string());
         }
     };
 
@@ -21,6 +23,6 @@ pub async fn hello_world() -> axum::response::Html<String> {
 
             views::render_train_table(announcements)
         }
-        Err(e) => views::error_page(&format!("Error fetching data: {}", e)),
+        Err(e) => Html(format!("Error fetching data: {}", e)),
     }
 }
