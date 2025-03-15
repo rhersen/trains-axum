@@ -1,8 +1,7 @@
 use crate::models::ApiResponse;
-use reqwest::Client;
 use std::error::Error;
 
-pub fn xml_data(api_key: &str) -> String {
+fn xml_data(api_key: &str) -> String {
     let iso = "%Y-%m-%dT%H:%M:%S%.3f%:z";
     let now = chrono::Utc::now();
     let hour = chrono::Duration::hours(1);
@@ -31,8 +30,8 @@ pub fn xml_data(api_key: &str) -> String {
     )
 }
 
-pub fn build_request(xml_data: String) -> reqwest::RequestBuilder {
-    Client::new()
+fn build_request(xml_data: String) -> reqwest::RequestBuilder {
+    reqwest::Client::new()
         .post("https://api.trafikinfo.trafikverket.se/v2/data.json")
         .header("Content-Type", "application/xml")
         .body(xml_data)
