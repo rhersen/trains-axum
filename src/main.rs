@@ -10,7 +10,9 @@ async fn main() {
 
     axum::serve(
         tokio::net::TcpListener::bind(addr).await.unwrap(),
-        axum::Router::new().route("/", axum::routing::get(routes::hello_world)),
+        axum::Router::new()
+            .route("/", axum::routing::get(routes::stations))
+            .route("/station/:code", axum::routing::get(routes::station)),
     )
     .await
     .unwrap();

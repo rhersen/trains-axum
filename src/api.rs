@@ -1,7 +1,7 @@
 use crate::models::ApiResponse;
 use std::error::Error;
 
-fn xml_data(api_key: &str) -> String {
+fn xml_data(api_key: &str, code: &str) -> String {
     let iso = "%Y-%m-%dT%H:%M:%S%.3f%:z";
     let now = chrono::Utc::now();
     let hour = chrono::Duration::hours(1);
@@ -14,7 +14,10 @@ fn xml_data(api_key: &str) -> String {
   <QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation' sseurl='false' schemaversion='1.6'>
     <FILTER>
       <AND>
-        <EQ name='LocationSignature' value='Sk' />
+        <NE name='Canceled' value='true' />
+        <EQ name='Advertised' value='true' />
+        <EQ name='ActivityType' value='Avgang' />
+        <EQ name='LocationSignature' value='{}' />
         <GT name='AdvertisedTimeAtLocation' value='{}' />
         <LT name='AdvertisedTimeAtLocation' value='{}' />
       </AND>
@@ -26,7 +29,7 @@ fn xml_data(api_key: &str) -> String {
   </QUERY>
 </REQUEST>
 "#,
-        api_key, since, until
+        api_key, code, since, until
     )
 }
 
@@ -37,8 +40,8 @@ fn build_request(xml_data: String) -> reqwest::RequestBuilder {
         .body(xml_data)
 }
 
-pub async fn fetch_announcements(api_key: &str) -> Result<ApiResponse, Box<dyn Error>> {
-    let data = xml_data(api_key);
+pub async fn fetch_announcements(api_key: &str, code: &str) -> Result<ApiResponse, Box<dyn Error>> {
+    let data = xml_data(api_key, code);
     let response = build_request(data).send().await?;
     let text = response.text().await?;
     let parsed: ApiResponse = serde_json::from_str(&text)?;
