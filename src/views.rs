@@ -3,7 +3,7 @@ use askama::Template;
 use axum::response::Html;
 
 #[derive(Template)]
-#[template(path = "train_table.html")]
+#[template(path = "station.html")]
 struct TrainTableTemplate {
     announcements: Vec<AnnouncementView>,
 }
@@ -16,7 +16,7 @@ struct AnnouncementView {
     destination: String,
 }
 
-pub fn render_train_table(announcements: Vec<TrainAnnouncement>) -> Html<String> {
+pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
         .map(|announcement| {
