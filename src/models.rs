@@ -27,6 +27,9 @@ pub struct TrainAnnouncement {
     #[serde(rename = "AdvertisedTimeAtLocation")]
     pub advertised_time_at_location: DateTime<FixedOffset>,
 
+    #[serde(rename = "LocationSignature")]
+    pub location_signature: String,
+
     #[serde(rename = "TimeAtLocationWithSeconds")]
     pub time_at_location_with_seconds: Option<DateTime<FixedOffset>>,
 

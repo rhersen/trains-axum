@@ -4,16 +4,16 @@ use axum::response::Html;
 
 #[derive(Template)]
 #[template(path = "station.html")]
-struct TrainTableTemplate {
+struct StationTemplate {
     announcements: Vec<AnnouncementView>,
 }
 
-// View model for train announcements
 struct AnnouncementView {
     advertised_train_ident: String,
     advertised_time: String,
     actual_time: String,
     destination: String,
+    location: String,
 }
 
 pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
@@ -27,8 +27,7 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
             let actual_time = announcement
                 .time_at_location_with_seconds
                 .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string());
-
-            // Get destination (if any)
+            let location = announcement.location_signature;
             let destination = if !announcement.to_location.is_empty() {
                 announcement
                     .to_location
@@ -44,11 +43,12 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
                 advertised_time,
                 actual_time,
                 destination,
+                location,
             }
         })
         .collect();
 
-    let template = TrainTableTemplate {
+    let template = StationTemplate {
         announcements: announcement_views,
     };
 

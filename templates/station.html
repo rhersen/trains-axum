@@ -16,6 +16,19 @@
                 border-bottom: 1px solid #333;
                 padding-bottom: 10px;
             }
+            a {
+                color: #03dac6;
+                text-decoration: underline;
+                transition: color 0.2s;
+            }
+            a:visited {
+                color: #bb86fc;
+            }
+            a:hover,
+            a:focus {
+                color: #ffd600;
+                outline: none;
+            }
             table {
                 border-collapse: collapse;
                 width: 100%;
@@ -69,13 +82,23 @@
                 <th>Advertised</th>
                 <th>Actual</th>
                 <th>Destination</th>
+                <th>Location</th>
             </tr>
             {% for announcement in announcements %}
             <tr>
-                <td>{{ announcement.advertised_train_ident }}</td>
+                <td>
+                    <a href="/train/{{ announcement.advertised_train_ident }}"
+                        >{{ announcement.advertised_train_ident }}</a
+                    >
+                </td>
                 <td>{{ announcement.advertised_time }}</td>
                 <td>{{ announcement.actual_time }}</td>
                 <td>{{ announcement.destination }}</td>
+                <td>
+                    <a href="/station/{{ announcement.location }}"
+                        >{{ announcement.location }}</a
+                    >
+                </td>
             </tr>
             {% endfor %}
         </table>

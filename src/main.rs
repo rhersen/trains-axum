@@ -12,7 +12,8 @@ async fn main() {
         tokio::net::TcpListener::bind(addr).await.unwrap(),
         axum::Router::new()
             .route("/", axum::routing::get(routes::stations))
-            .route("/station/:code", axum::routing::get(routes::station)),
+            .route("/station/:code", axum::routing::get(routes::station))
+            .route("/train/:id", axum::routing::get(routes::train)),
     )
     .await
     .unwrap();
