@@ -13,7 +13,16 @@ struct AnnouncementView {
     advertised_time: String,
     actual_time: String,
     destination: String,
-    location: String,
+    location_signature: String,
+    location_name: String,
+}
+
+fn name(location_signature: String) -> String {
+    if location_signature == "Sk" {
+        "Skövde".to_string()
+    } else {
+        location_signature
+    }
 }
 
 pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
@@ -27,7 +36,8 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
             let actual_time = announcement
                 .time_at_location_with_seconds
                 .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string());
-            let location = announcement.location_signature;
+            let location_name = name(announcement.location_signature.clone());
+            let location_signature = announcement.location_signature;
             let destination = if !announcement.to_location.is_empty() {
                 announcement
                     .to_location
@@ -43,7 +53,8 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
                 advertised_time,
                 actual_time,
                 destination,
-                location,
+                location_signature,
+                location_name,
             }
         })
         .collect();
