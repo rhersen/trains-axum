@@ -1,4 +1,5 @@
 mod api;
+mod locations;
 mod models;
 mod routes;
 mod views;

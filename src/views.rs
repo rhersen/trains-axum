@@ -1,3 +1,4 @@
+use crate::locations::name;
 use crate::models::TrainAnnouncement;
 use askama::Template;
 use axum::response::Html;
@@ -15,16 +16,6 @@ struct AnnouncementView {
     destination: String,
     location_signature: String,
     location_name: String,
-}
-
-fn name(location_signature: String) -> String {
-    if location_signature == "Sk" {
-        "Skövde".to_string()
-    } else if location_signature == "Tul" {
-        "Tullinge".to_string()
-    } else {
-        location_signature
-    }
 }
 
 pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
