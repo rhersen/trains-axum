@@ -20,6 +20,8 @@ struct AnnouncementView {
 fn name(location_signature: String) -> String {
     if location_signature == "Sk" {
         "Skövde".to_string()
+    } else if location_signature == "Tul" {
+        "Tullinge".to_string()
     } else {
         location_signature
     }
@@ -36,8 +38,8 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
             let actual_time = announcement
                 .time_at_location_with_seconds
                 .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string());
-            let location_name = name(announcement.location_signature.clone());
-            let location_signature = announcement.location_signature;
+            let location_signature = announcement.location_signature.clone();
+            let location_name = name(announcement.location_signature);
             let destination = if !announcement.to_location.is_empty() {
                 announcement
                     .to_location
