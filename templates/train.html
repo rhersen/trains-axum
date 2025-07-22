@@ -75,22 +75,20 @@
         </style>
     </head>
     <body>
-        <h1>{{location_name}}</h1>
+        <h1>{{id}} mot {{destination}}</h1>
         <table>
             <tr>
-                <th>Train ID</th>
-                <th>Destination</th>
+                <th>Location</th>
                 <th>Advertised</th>
                 <th>Actual</th>
             </tr>
             {% for announcement in announcements %}
             <tr>
                 <td>
-                    <a href="/train/{{ announcement.advertised_train_ident }}"
-                        >{{ announcement.advertised_train_ident }}</a
+                    <a href="/station/{{ announcement.location_signature }}"
+                        >{{ announcement.location_name }}</a
                     >
                 </td>
-                <td>{{ announcement.destination }}</td>
                 <td>{{ announcement.advertised_time }}</td>
                 <td>{{ announcement.actual_time }}</td>
             </tr>
