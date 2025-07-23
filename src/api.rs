@@ -33,6 +33,7 @@ fn station_query(api_key: &str, code: &str) -> String {
     <INCLUDE>AdvertisedTrainIdent</INCLUDE>
     <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
     <INCLUDE>LocationSignature</INCLUDE>
+    <INCLUDE>ProductInformation</INCLUDE>
     <INCLUDE>TimeAtLocationWithSeconds</INCLUDE>
     <INCLUDE>ToLocation</INCLUDE>
   </QUERY>
@@ -74,6 +75,7 @@ fn train_query(api_key: &str, id: &str) -> String {
     <INCLUDE>AdvertisedTrainIdent</INCLUDE>
     <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
     <INCLUDE>LocationSignature</INCLUDE>
+    <INCLUDE>ProductInformation</INCLUDE>
     <INCLUDE>TimeAtLocationWithSeconds</INCLUDE>
     <INCLUDE>ToLocation</INCLUDE>
   </QUERY>

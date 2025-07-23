@@ -35,6 +35,18 @@ pub struct TrainAnnouncement {
 
     #[serde(rename = "ToLocation", default)]
     pub to_location: Vec<TrainLocation>,
+
+    #[serde(rename = "ProductInformation", default)]
+    pub product_information: Vec<ProductInformation>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ProductInformation {
+    #[serde(rename = "Code")]
+    pub code: String,
+
+    #[serde(rename = "Description")]
+    pub description: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

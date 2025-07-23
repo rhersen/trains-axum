@@ -78,6 +78,7 @@
         <h1>{{location_name}}</h1>
         <table>
             <tr>
+                <th>Product</th>
                 <th>Train ID</th>
                 <th>Destination</th>
                 <th>Advertised</th>
@@ -85,6 +86,7 @@
             </tr>
             {% for announcement in announcements %}
             <tr>
+                <td>{{ announcement.product_information }}</td>
                 <td>
                     <a href="/train/{{ announcement.advertised_train_ident }}"
                         >{{ announcement.advertised_train_ident }}</a

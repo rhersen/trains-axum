@@ -25,6 +25,7 @@ struct AnnouncementView {
     destination: String,
     location_signature: String,
     location_name: String,
+    product_information: String,
 }
 
 fn advertised_time(announcement: &TrainAnnouncement) -> String {
@@ -49,6 +50,18 @@ fn destination(announcement: &TrainAnnouncement) -> String {
             .map_or("Unknown".to_string(), |loc| name(&loc.location_name))
     } else {
         "N/A".to_string()
+    }
+}
+
+fn product_information(announcement: &TrainAnnouncement) -> String {
+    if announcement.product_information.is_empty() {
+        "".to_string()
+    } else {
+        announcement
+            .product_information
+            .iter()
+            .map(|product| product.description.clone())
+            .collect()
     }
 }
 
@@ -85,6 +98,7 @@ pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
             actual_time: actual_time(&announcement),
             destination: destination(&announcement),
             location_name: name(&announcement.location_signature),
+            product_information: product_information(announcement),
         })
         .collect();
 
@@ -110,6 +124,7 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
             actual_time: actual_time(&announcement),
             destination: destination(&announcement),
             location_name: name(&announcement.location_signature),
+            product_information: product_information(announcement),
         })
         .collect();
 
