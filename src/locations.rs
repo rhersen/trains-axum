@@ -1,7 +1,11 @@
 use phf::phf_map;
 
-pub fn name(signature: &str) -> &str {
-    LOCATIONS.get(signature).copied().unwrap_or(signature)
+pub fn name(signature: &str) -> String {
+    LOCATIONS
+        .get(signature)
+        .copied()
+        .unwrap_or(signature)
+        .to_string()
 }
 
 static LOCATIONS: phf::Map<&'static str, &'static str> = phf_map! {

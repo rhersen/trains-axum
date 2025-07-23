@@ -27,30 +27,54 @@ struct AnnouncementView {
     location_name: String,
 }
 
+fn advertised_time(announcement: &TrainAnnouncement) -> String {
+    announcement
+        .advertised_time_at_location
+        .format("%H:%M")
+        .to_string()
+}
+
+fn actual_time(announcement: &TrainAnnouncement) -> String {
+    announcement
+        .time_at_location_with_seconds
+        .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string())
+}
+
+fn destination(announcement: &TrainAnnouncement) -> String {
+    if !announcement.to_location.is_empty() {
+        announcement
+            .to_location
+            .iter()
+            .min_by_key(|loc| loc.priority)
+            .map_or("Unknown".to_string(), |loc| name(&loc.location_name))
+    } else {
+        "N/A".to_string()
+    }
+}
+
+fn train_ident(announcements: &Vec<AnnouncementView>) -> String {
+    announcements
+        .first()
+        .map(|a| a.advertised_train_ident.clone())
+        .unwrap_or("Unknown".to_string())
+}
+
+fn dest(announcements: &Vec<AnnouncementView>) -> String {
+    announcements
+        .first()
+        .map(|a| a.destination.clone())
+        .unwrap_or("Unknown".to_string())
+}
+
 pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
         .map(|announcement| {
-            let advertised_time = announcement
-                .advertised_time_at_location
-                .format("%H:%M")
-                .to_string();
-            let actual_time = announcement
-                .time_at_location_with_seconds
-                .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string());
+            let advertised_time = advertised_time(&announcement);
+            let actual_time = actual_time(&announcement);
             let location_signature = announcement.location_signature.clone();
-            let location_name = name(&announcement.location_signature).to_string();
-            let destination = if !announcement.to_location.is_empty() {
-                announcement
-                    .to_location
-                    .iter()
-                    .min_by_key(|loc| loc.priority)
-                    .map_or("Unknown".to_string(), |loc| {
-                        name(&loc.location_name).to_string()
-                    })
-            } else {
-                "N/A".to_string()
-            };
+            let location_name = name(&announcement.location_signature);
+            let destination = destination(&announcement);
 
             AnnouncementView {
                 advertised_train_ident: announcement.advertised_train_ident,
@@ -69,7 +93,7 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
         .unwrap_or("Unknown");
 
     let template = StationTemplate {
-        location_name: name(&location_name).to_string(),
+        location_name: name(&location_name),
         announcements: announcement_views,
     };
 
@@ -84,26 +108,11 @@ pub fn render_train(announcements: Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
         .map(|announcement| {
-            let advertised_time = announcement
-                .advertised_time_at_location
-                .format("%H:%M")
-                .to_string();
-            let actual_time = announcement
-                .time_at_location_with_seconds
-                .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string());
+            let advertised_time = advertised_time(&announcement);
+            let actual_time = actual_time(&announcement);
             let location_signature = announcement.location_signature.clone();
-            let location_name = name(&announcement.location_signature).to_string();
-            let destination = if !announcement.to_location.is_empty() {
-                announcement
-                    .to_location
-                    .iter()
-                    .min_by_key(|loc| loc.priority)
-                    .map_or("Unknown".to_string(), |loc| {
-                        name(&loc.location_name).to_string()
-                    })
-            } else {
-                "N/A".to_string()
-            };
+            let location_name = name(&announcement.location_signature);
+            let destination = destination(&announcement);
 
             AnnouncementView {
                 advertised_train_ident: announcement.advertised_train_ident,
@@ -116,18 +125,9 @@ pub fn render_train(announcements: Vec<TrainAnnouncement>) -> Html<String> {
         })
         .collect();
 
-    let first = announcement_views.first();
-    let id = first
-        .map(|a| a.advertised_train_ident.clone())
-        .unwrap_or("Unknown".to_string());
-
-    let destination = first
-        .map(|a| a.destination.clone())
-        .unwrap_or("Unknown".to_string());
-
     let template = TrainTemplate {
-        id,
-        destination,
+        id: train_ident(&announcement_views),
+        destination: dest(&announcement_views),
         announcements: announcement_views,
     };
     Html(
