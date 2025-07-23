@@ -66,24 +66,16 @@ fn dest(announcements: &Vec<AnnouncementView>) -> String {
         .unwrap_or("Unknown".to_string())
 }
 
-pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
+pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
-        .map(|announcement| {
-            let advertised_time = advertised_time(&announcement);
-            let actual_time = actual_time(&announcement);
-            let location_signature = announcement.location_signature.clone();
-            let location_name = name(&announcement.location_signature);
-            let destination = destination(&announcement);
-
-            AnnouncementView {
-                advertised_train_ident: announcement.advertised_train_ident,
-                advertised_time,
-                actual_time,
-                destination,
-                location_signature,
-                location_name,
-            }
+        .map(|announcement| AnnouncementView {
+            advertised_train_ident: announcement.advertised_train_ident.clone(),
+            location_signature: announcement.location_signature.clone(),
+            advertised_time: advertised_time(&announcement),
+            actual_time: actual_time(&announcement),
+            destination: destination(&announcement),
+            location_name: name(&announcement.location_signature),
         })
         .collect();
 
@@ -104,24 +96,16 @@ pub fn render_station(announcements: Vec<TrainAnnouncement>) -> Html<String> {
     )
 }
 
-pub fn render_train(announcements: Vec<TrainAnnouncement>) -> Html<String> {
+pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
-        .map(|announcement| {
-            let advertised_time = advertised_time(&announcement);
-            let actual_time = actual_time(&announcement);
-            let location_signature = announcement.location_signature.clone();
-            let location_name = name(&announcement.location_signature);
-            let destination = destination(&announcement);
-
-            AnnouncementView {
-                advertised_train_ident: announcement.advertised_train_ident,
-                advertised_time,
-                actual_time,
-                destination,
-                location_signature,
-                location_name,
-            }
+        .map(|announcement| AnnouncementView {
+            advertised_train_ident: announcement.advertised_train_ident.clone(),
+            location_signature: announcement.location_signature.clone(),
+            advertised_time: advertised_time(&announcement),
+            actual_time: actual_time(&announcement),
+            destination: destination(&announcement),
+            location_name: name(&announcement.location_signature),
         })
         .collect();
 

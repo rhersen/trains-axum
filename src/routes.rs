@@ -27,7 +27,7 @@ pub async fn train(
                 .flat_map(|r| r.train_announcements)
                 .collect();
 
-            views::render_train(announcements)
+            views::render_train(&announcements)
         }
         Err(e) => Html(format!("Error fetching data: {}", e)),
     }
@@ -52,7 +52,7 @@ pub async fn station(
                 .flat_map(|r| r.train_announcements)
                 .collect();
 
-            views::render_station(announcements)
+            views::render_station(&announcements)
         }
         Err(e) => Html(format!("Error fetching data: {}", e)),
     }
