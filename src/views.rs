@@ -66,6 +66,15 @@ fn dest(announcements: &Vec<AnnouncementView>) -> String {
         .unwrap_or("Unknown".to_string())
 }
 
+fn location(announcements: &Vec<AnnouncementView>) -> String {
+    name(
+        announcements
+            .first()
+            .map(|a| a.location_signature.as_str())
+            .unwrap_or("Unknown"),
+    )
+}
+
 pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
@@ -79,13 +88,8 @@ pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
         })
         .collect();
 
-    let location_name = announcement_views
-        .first()
-        .map(|a| a.location_signature.as_str())
-        .unwrap_or("Unknown");
-
     let template = StationTemplate {
-        location_name: name(&location_name),
+        location_name: location(&announcement_views),
         announcements: announcement_views,
     };
 
