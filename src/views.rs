@@ -54,15 +54,10 @@ fn destination(announcement: &TrainAnnouncement) -> String {
 }
 
 fn product_information(announcement: &TrainAnnouncement) -> String {
-    if announcement.product_information.is_empty() {
-        "".to_string()
-    } else {
-        announcement
-            .product_information
-            .iter()
-            .map(|product| product.description.clone())
-            .collect()
-    }
+    announcement
+        .product_information
+        .first()
+        .map_or("".to_string(), |product| product.description.clone())
 }
 
 fn train_ident(announcements: &Vec<AnnouncementView>) -> String {
