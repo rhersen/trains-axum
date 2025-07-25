@@ -1,6 +1,10 @@
 use crate::models::ApiResponse;
 use std::error::Error;
 
+const ISO: &'static str = "%Y-%m-%dT%H:%M:%S%:z";
+const SINCE: chrono::TimeDelta = chrono::Duration::hours(4);
+const UNTIL: chrono::TimeDelta = chrono::Duration::hours(12);
+
 pub async fn fetch_station(api_key: &str, code: &str) -> Result<ApiResponse, Box<dyn Error>> {
     let data = station_query(api_key, code);
     let response = build_request(data).send().await?;
@@ -10,11 +14,9 @@ pub async fn fetch_station(api_key: &str, code: &str) -> Result<ApiResponse, Box
 }
 
 fn station_query(api_key: &str, code: &str) -> String {
-    let iso = "%Y-%m-%dT%H:%M:%S%.3f%:z";
     let now = chrono::Utc::now();
-    let hour = chrono::Duration::hours(1);
-    let since = (now - hour).format(iso);
-    let until = (now + hour).format(iso);
+    let since = (now - SINCE).format(ISO);
+    let until = (now + UNTIL).format(ISO);
     format!(
         r#"
 <REQUEST>
@@ -52,11 +54,9 @@ pub async fn fetch_train(api_key: &str, code: &str) -> Result<ApiResponse, Box<d
 }
 
 fn train_query(api_key: &str, id: &str) -> String {
-    let iso = "%Y-%m-%dT%H:%M:%S%.3f%:z";
     let now = chrono::Utc::now();
-    let hour = chrono::Duration::hours(1);
-    let since = (now - hour).format(iso);
-    let until = (now + hour).format(iso);
+    let since = (now - SINCE).format(ISO);
+    let until = (now + UNTIL).format(ISO);
     format!(
         r#"
 <REQUEST>

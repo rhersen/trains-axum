@@ -15,6 +15,7 @@ struct StationTemplate {
 struct TrainTemplate {
     id: String,
     destination: String,
+    product_information: String,
     announcements: Vec<AnnouncementView>,
 }
 
@@ -42,15 +43,12 @@ fn actual_time(announcement: &TrainAnnouncement) -> String {
 }
 
 fn destination(announcement: &TrainAnnouncement) -> String {
-    if !announcement.to_location.is_empty() {
-        announcement
-            .to_location
-            .iter()
-            .min_by_key(|loc| loc.priority)
-            .map_or("Unknown".to_string(), |loc| name(&loc.location_name))
-    } else {
-        "N/A".to_string()
-    }
+    announcement
+        .to_location
+        .iter()
+        .map(|loc| name(&loc.location_name))
+        .collect::<Vec<String>>()
+        .join(", ")
 }
 
 fn product_information(announcement: &TrainAnnouncement) -> String {
@@ -60,7 +58,14 @@ fn product_information(announcement: &TrainAnnouncement) -> String {
         .map_or("".to_string(), |product| product.description.clone())
 }
 
-fn train_ident(announcements: &Vec<AnnouncementView>) -> String {
+fn prod(announcements: &Vec<TrainAnnouncement>) -> String {
+    announcements
+        .first()
+        .map(product_information)
+        .unwrap_or("Unknown".to_string())
+}
+
+fn train_ident(announcements: &Vec<TrainAnnouncement>) -> String {
     announcements
         .first()
         .map(|a| a.advertised_train_ident.clone())
@@ -74,7 +79,7 @@ fn dest(announcements: &Vec<AnnouncementView>) -> String {
         .unwrap_or("Unknown".to_string())
 }
 
-fn location(announcements: &Vec<AnnouncementView>) -> String {
+fn location(announcements: &Vec<TrainAnnouncement>) -> String {
     name(
         announcements
             .first()
@@ -98,7 +103,7 @@ pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
         .collect();
 
     let template = StationTemplate {
-        location_name: location(&announcement_views),
+        location_name: location(announcements),
         announcements: announcement_views,
     };
 
@@ -124,8 +129,9 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
         .collect();
 
     let template = TrainTemplate {
-        id: train_ident(&announcement_views),
+        id: train_ident(announcements),
         destination: dest(&announcement_views),
+        product_information: prod(announcements),
         announcements: announcement_views,
     };
     Html(
