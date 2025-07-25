@@ -29,65 +29,6 @@ struct AnnouncementView {
     product_information: String,
 }
 
-fn advertised_time(announcement: &TrainAnnouncement) -> String {
-    announcement
-        .advertised_time_at_location
-        .format("%H:%M")
-        .to_string()
-}
-
-fn actual_time(announcement: &TrainAnnouncement) -> String {
-    announcement
-        .time_at_location_with_seconds
-        .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string())
-}
-
-fn destination(announcement: &TrainAnnouncement) -> String {
-    announcement
-        .to_location
-        .iter()
-        .map(|loc| name(&loc.location_name))
-        .collect::<Vec<String>>()
-        .join(", ")
-}
-
-fn product_information(announcement: &TrainAnnouncement) -> String {
-    announcement
-        .product_information
-        .first()
-        .map_or("".to_string(), |product| product.description.clone())
-}
-
-fn prod(announcements: &Vec<TrainAnnouncement>) -> String {
-    announcements
-        .first()
-        .map(product_information)
-        .unwrap_or("Unknown".to_string())
-}
-
-fn train_ident(announcements: &Vec<TrainAnnouncement>) -> String {
-    announcements
-        .first()
-        .map(|a| a.advertised_train_ident.clone())
-        .unwrap_or("Unknown".to_string())
-}
-
-fn dest(announcements: &Vec<AnnouncementView>) -> String {
-    announcements
-        .first()
-        .map(|a| a.destination.clone())
-        .unwrap_or("Unknown".to_string())
-}
-
-fn location(announcements: &Vec<TrainAnnouncement>) -> String {
-    name(
-        announcements
-            .first()
-            .map(|a| a.location_signature.as_str())
-            .unwrap_or("Unknown"),
-    )
-}
-
 pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
     let announcement_views: Vec<AnnouncementView> = announcements
         .into_iter()
@@ -130,7 +71,7 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
 
     let template = TrainTemplate {
         id: train_ident(announcements),
-        destination: dest(&announcement_views),
+        destination: dest(announcements),
         product_information: prod(announcements),
         announcements: announcement_views,
     };
@@ -139,4 +80,63 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
             .render()
             .unwrap_or_else(|e| format!("Template error: {}", e)),
     )
+}
+
+fn advertised_time(announcement: &TrainAnnouncement) -> String {
+    announcement
+        .advertised_time_at_location
+        .format("%H:%M")
+        .to_string()
+}
+
+fn actual_time(announcement: &TrainAnnouncement) -> String {
+    announcement
+        .time_at_location_with_seconds
+        .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string())
+}
+
+fn destination(announcement: &TrainAnnouncement) -> String {
+    announcement
+        .to_location
+        .iter()
+        .map(|loc| name(&loc.location_name))
+        .collect::<Vec<String>>()
+        .join(", ")
+}
+
+fn product_information(announcement: &TrainAnnouncement) -> String {
+    announcement
+        .product_information
+        .first()
+        .map_or("".to_string(), |product| product.description.clone())
+}
+
+fn location(announcements: &Vec<TrainAnnouncement>) -> String {
+    name(
+        announcements
+            .first()
+            .map(|a| a.location_signature.as_str())
+            .unwrap_or("Unknown"),
+    )
+}
+
+fn train_ident(announcements: &Vec<TrainAnnouncement>) -> String {
+    announcements
+        .first()
+        .map(|a| a.advertised_train_ident.clone())
+        .unwrap_or("Unknown".to_string())
+}
+
+fn dest(announcements: &Vec<TrainAnnouncement>) -> String {
+    announcements
+        .first()
+        .map(destination)
+        .unwrap_or("Unknown".to_string())
+}
+
+fn prod(announcements: &Vec<TrainAnnouncement>) -> String {
+    announcements
+        .first()
+        .map(product_information)
+        .unwrap_or("Unknown".to_string())
 }
