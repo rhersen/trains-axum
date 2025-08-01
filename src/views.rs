@@ -15,6 +15,7 @@ struct StationTemplate {
 struct TrainTemplate {
     id: String,
     from: String,
+    via: String,
     destination: String,
     product_information: String,
     announcements: Vec<AnnouncementView>,
@@ -76,6 +77,7 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
     let template = TrainTemplate {
         id: train_ident(announcements),
         from: from(announcements),
+        via: via_stations(announcements),
         destination: dest(announcements),
         product_information: prod(announcements),
         announcements: announcement_views,
@@ -100,12 +102,16 @@ fn actual_time(announcement: &TrainAnnouncement) -> String {
         .map_or("".to_string(), |time| time.format("%H:%M:%S").to_string())
 }
 
-fn destination(announcement: &TrainAnnouncement) -> String {
-    join_locations(&announcement.to_location)
-}
-
 fn origin(announcement: &TrainAnnouncement) -> String {
     join_locations(&announcement.from_location)
+}
+
+fn via(announcement: &TrainAnnouncement) -> String {
+    join_locations(&announcement.via_to_location)
+}
+
+fn destination(announcement: &TrainAnnouncement) -> String {
+    join_locations(&announcement.to_location)
 }
 
 fn join_locations(locations: &Vec<TrainLocation>) -> String {
@@ -143,6 +149,13 @@ fn from(announcements: &Vec<TrainAnnouncement>) -> String {
     announcements
         .first()
         .map(origin)
+        .unwrap_or("Unknown".to_string())
+}
+
+fn via_stations(announcements: &Vec<TrainAnnouncement>) -> String {
+    announcements
+        .first()
+        .map(via)
         .unwrap_or("Unknown".to_string())
 }
 
