@@ -14,6 +14,7 @@ struct StationTemplate {
 #[template(path = "train.html")]
 struct TrainTemplate {
     id: String,
+    from: String,
     destination: String,
     product_information: String,
     announcements: Vec<AnnouncementView>,
@@ -74,6 +75,7 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
 
     let template = TrainTemplate {
         id: train_ident(announcements),
+        from: from(announcements),
         destination: dest(announcements),
         product_information: prod(announcements),
         announcements: announcement_views,
@@ -134,6 +136,13 @@ fn train_ident(announcements: &Vec<TrainAnnouncement>) -> String {
     announcements
         .first()
         .map(|a| a.advertised_train_ident.clone())
+        .unwrap_or("Unknown".to_string())
+}
+
+fn from(announcements: &Vec<TrainAnnouncement>) -> String {
+    announcements
+        .first()
+        .map(origin)
         .unwrap_or("Unknown".to_string())
 }
 
