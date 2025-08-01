@@ -80,7 +80,8 @@
             <tr>
                 <th>Product</th>
                 <th>Train ID</th>
-                <th>Destination</th>
+                <th>From</th>
+                <th>To</th>
                 <th>Advertised</th>
                 <th>Actual</th>
             </tr>
@@ -92,6 +93,7 @@
                         >{{ announcement.advertised_train_ident }}</a
                     >
                 </td>
+                <td>{{ announcement.from }}</td>
                 <td>{{ announcement.destination }}</td>
                 <td>{{ announcement.advertised_time }}</td>
                 <td>{{ announcement.actual_time }}</td>

@@ -36,6 +36,12 @@ pub struct TrainAnnouncement {
     #[serde(rename = "ToLocation", default)]
     pub to_location: Vec<TrainLocation>,
 
+    #[serde(rename = "FromLocation", default)]
+    pub from_location: Vec<TrainLocation>,
+
+    #[serde(rename = "ViaToLocation", default)]
+    pub via_to_location: Vec<TrainLocation>,
+
     #[serde(rename = "ProductInformation", default)]
     pub product_information: Vec<ProductInformation>,
 }

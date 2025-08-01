@@ -1,5 +1,5 @@
 use crate::locations::name;
-use crate::models::TrainAnnouncement;
+use crate::models::{TrainAnnouncement, TrainLocation};
 use askama::Template;
 use axum::response::Html;
 
@@ -24,6 +24,7 @@ struct AnnouncementView {
     advertised_time: String,
     actual_time: String,
     destination: String,
+    from: String,
     location_signature: String,
     location_name: String,
     product_information: String,
@@ -37,6 +38,7 @@ pub fn render_station(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
             location_signature: announcement.location_signature.clone(),
             advertised_time: advertised_time(&announcement),
             actual_time: actual_time(&announcement),
+            from: origin(&announcement),
             destination: destination(&announcement),
             location_name: name(&announcement.location_signature),
             product_information: product_information(announcement),
@@ -63,6 +65,7 @@ pub fn render_train(announcements: &Vec<TrainAnnouncement>) -> Html<String> {
             location_signature: announcement.location_signature.clone(),
             advertised_time: advertised_time(&announcement),
             actual_time: actual_time(&announcement),
+            from: origin(&announcement),
             destination: destination(&announcement),
             location_name: name(&announcement.location_signature),
             product_information: product_information(announcement),
@@ -96,8 +99,15 @@ fn actual_time(announcement: &TrainAnnouncement) -> String {
 }
 
 fn destination(announcement: &TrainAnnouncement) -> String {
-    announcement
-        .to_location
+    join_locations(&announcement.to_location)
+}
+
+fn origin(announcement: &TrainAnnouncement) -> String {
+    join_locations(&announcement.from_location)
+}
+
+fn join_locations(locations: &Vec<TrainLocation>) -> String {
+    locations
         .iter()
         .map(|loc| name(&loc.location_name))
         .collect::<Vec<String>>()
